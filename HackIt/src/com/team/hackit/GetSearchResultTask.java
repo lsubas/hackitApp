@@ -55,7 +55,7 @@ public class GetSearchResultTask extends AsyncTask<Void, Void, List<SearchResult
         	params.add(new BasicNameValuePair("id",mEmail) );
         	params.add(new BasicNameValuePair("token",mToken) );
         	params.add(new BasicNameValuePair("search",msearchText) );
-           	String response = sh.makeServiceCall("http://10.143.25.244/search", sh.POST, params);
+           	String response = sh.makeServiceCall(MainActivity.SERVER_URL+"/search", sh.POST, params);
         	
         	return SearchResultParser.parse(response);
         } catch (Exception exception) {

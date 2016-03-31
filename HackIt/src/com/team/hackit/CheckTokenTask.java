@@ -49,7 +49,7 @@ public class CheckTokenTask extends AsyncTask<Void, Void, Boolean> {
         	ServiceHandler sh = new ServiceHandler();
         	ArrayList<NameValuePair>  query= new ArrayList<NameValuePair>();
            	query.add(new BasicNameValuePair("id",mEmail) );
-           	String response = sh.makeServiceCall("http://10.143.25.244:80/checkToken", sh.GET, query);
+           	String response = sh.makeServiceCall(MainActivity.SERVER_URL+"/checkToken", sh.GET, query);
         	
         	return TokenCheckParser.parse(response);
         } catch (Exception exception) {

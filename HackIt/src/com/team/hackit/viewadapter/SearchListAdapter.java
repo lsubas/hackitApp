@@ -33,8 +33,12 @@ public class SearchListAdapter extends ArrayAdapter<SearchResult>{
 		View rowView= inflater.inflate(R.layout.list_single, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-		txtTitle.setText(searchResults.get(position).getTitle());
-		new ImageLoadTask(searchResults.get(position).getThumbnail(), imageView).execute();
+		if (searchResults != null){
+			txtTitle.setText(searchResults.get(position).getTitle());
+			new ImageLoadTask(searchResults.get(position).getThumbnail(), imageView).execute();
+		}
+		else
+			txtTitle.setText("No result found");
 		return rowView;
 	}
 	}

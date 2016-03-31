@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-
+    public static String SERVER_URL = "http://10.143.25.12:80";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +71,7 @@ public class MainActivity extends Activity {
 	private void pickUserAccount() {
 	    String[] accountTypes = new String[]{"com.google"};
 	    Intent intent = AccountPicker.newChooseAccountIntent(null, null,
-	            accountTypes, false, null, null, null, null);
+	            accountTypes, true, null, null, null, null);
 	    startActivityForResult(intent, REQUEST_CODE_PICK_ACCOUNT);
 	}
 	
@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
 	        if (resultCode == RESULT_OK) {
 	            mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 	            // With the account name acquired, go get the auth token
-	            getUsername();
+	            getUsername(false);
 	        } else if (resultCode == RESULT_CANCELED) {
 	            // The account picker dialog closed without selecting an account.
 	            // Notify users that they must pick an account to proceed.
@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
 	        // Receiving a result from the AccountPicker
 	        if (resultCode == RESULT_OK) {
 	           // With the account name acquired, go get the auth token
-	            getUsername();
+	            getUsername(true);
 	        } else if (resultCode == RESULT_CANCELED) {
 	            // The account picker dialog closed without selecting an account.
 	            // Notify users that they must pick an account to proceed.
@@ -142,11 +142,13 @@ public class MainActivity extends Activity {
 	 * If the account is not yet known, invoke the picker. Once the account is known,
 	 * start an instance of the AsyncTask to get the auth token and do work with it.
 	 */
-	private void getUsername() {
+	private void getUsername(boolean skipTokenCheck) {
 	    if (mEmail == null) {
 	        pickUserAccount();
-	    } else {
+	    } else if (!skipTokenCheck){
 	    	 new CheckTokenTask(MainActivity.this, mEmail).execute();
+	    } else {
+	    	new GetUsernameTask(MainActivity.this, mEmail, SERVER_SCOPE).execute();
 	    }
 	}
 	
