@@ -26,7 +26,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    public static String SERVER_URL = "http://10.143.25.12:80";
+    public static String SERVER_URL = "http://10.78.220.140:80";
+    private static final String SERVER_CLIENT_ID = "534895897275-k9242i3q768bd9ndf8048vurf6pjkslq.apps.googleusercontent.com";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -135,7 +136,7 @@ public class MainActivity extends Activity {
 	}
 	
 	
-	static String SERVER_SCOPE = "oauth2:server:client_id:534895897275-k9242i3q768bd9ndf8048vurf6pjkslq.apps.googleusercontent.com:api_scope:https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube";
+	static String SERVER_SCOPE = "oauth2:server:client_id:"+SERVER_CLIENT_ID+":api_scope:https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube";
 
 	/**
 	 * Attempts to retrieve the username.
