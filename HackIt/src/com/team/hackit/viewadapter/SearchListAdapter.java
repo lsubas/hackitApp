@@ -35,10 +35,12 @@ public class SearchListAdapter extends ArrayAdapter<SearchResult>{
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
 		if (searchResults != null){
 			txtTitle.setText(searchResults.get(position).getTitle());
+			txtTitle.setTag(searchResults.get(position).getVideoId());
 			new ImageLoadTask(searchResults.get(position).getThumbnail(), imageView).execute();
+			
 		}
 		else
 			txtTitle.setText("No result found");
 		return rowView;
 	}
-	}
+}

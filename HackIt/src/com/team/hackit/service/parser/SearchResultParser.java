@@ -19,7 +19,7 @@ static public List<SearchResult> parse(String in){
 			
 			for(int i=0; i<searchItems.length();++i){
 				JSONObject searchItem = (JSONObject)searchItems.get(i);
-				String videoId = searchItem.getJSONObject("id").getString("videoId");
+				String videoId = searchItem.getJSONObject("id")!= null? searchItem.getJSONObject("id").getString("videoId"): null;
 				String title = searchItem.getJSONObject("snippet").getString("title");
 				String description = searchItem.getJSONObject("snippet").getString("description");
 				String thumbmnail = searchItem.getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("default").getString("url");

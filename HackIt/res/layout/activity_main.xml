@@ -2,37 +2,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.team.hackit.MainActivity" 
-    android:orientation="vertical">
+    tools:context="com.team.hackit.MainActivity" >
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText"
+        android:layout_alignParentTop="true"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        >
 
+        <TextView
+            android:id="@+id/subscribedChannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Subscriptions" />
 
-		<Button
-	    	android:id="@+id/button"
-	    	android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:text="Search"
-	    	android:layout_alignParentRight="true" 
-	    	tools:ignore="HardcodedText" />	
-    	
-    	<EditText 
-      		android:id="@+id/editText"
-      		android:layout_width="fill_parent"
-      		android:layout_height="wrap_content"
- 			android:layout_toLeftOf="@id/button"
- 			android:inputType="text"/>
-    	
-    	 <ListView
-       		android:id="@+id/list"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_below="@id/editText"
-        	android:orientation="vertical"> 
-     	</ListView>
+        <TextView
+            android:id="@+id/likedVideo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Liked Videos" 
+            android:layout_marginLeft="25dp"/>
 
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/linear"
+        android:text="Search"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/button"
+        android:layout_below="@id/linear"
+        android:inputType="text" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editText"
+        android:orientation="vertical" >
+    </ListView>
 
 
 </RelativeLayout>

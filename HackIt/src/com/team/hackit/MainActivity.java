@@ -19,15 +19,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    public static String SERVER_URL = "http://10.78.220.140:80";
+    public static String SERVER_URL = "http://10.143.25.131:80";
     private static final String SERVER_CLIENT_ID = "534895897275-k9242i3q768bd9ndf8048vurf6pjkslq.apps.googleusercontent.com";
+    public static final String MY_APP_ID = "534895897275-3fbh487lhc69bfhefih77td6651qv36o.apps.googleusercontent.com";
+    public final static String YOUTUBE = "com.myfirstapp.MESSAGE";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,6 +52,36 @@ public class MainActivity extends Activity {
 		 searchButton.setOnClickListener(oclBtnOk);
 		 ListView list=(ListView)findViewById(R.id.list);
 		 list.setVisibility(View.VISIBLE);
+		 
+		 final TextView likeButton = (TextView) findViewById(R.id.likedVideo);
+		 likeButton.setClickable(true);
+		 OnClickListener oclLikeBtnOk = new OnClickListener() {
+		       @Override
+		       public void onClick(View v) {
+		    	   EditText searchText = (EditText)findViewById(R.id.editText);
+		    	   new GetLikedVideoTask(MainActivity.this,mToken, mEmail ).execute();
+		       }
+		     };
+		
+		
+		likeButton.setOnClickListener(oclLikeBtnOk);
+		 final TextView subButton = (TextView) findViewById(R.id.subscribedChannel);
+		 subButton.setClickable(true);
+		 OnClickListener oclSubBtnOk = new OnClickListener() {
+		       @Override
+		       public void onClick(View v) {
+		    	   new GetSubscribedTask(MainActivity.this,mToken, mEmail ).execute();
+		       }
+		     };
+		subButton.setClickable(true);
+		
+		subButton.setOnClickListener(oclSubBtnOk);
+		
+		likeButton.setEnabled(false);
+		subButton.setEnabled(false);
+		searchButton.setEnabled(false);
+	
+	
 	}
 
 	@Override
@@ -83,6 +119,15 @@ public class MainActivity extends Activity {
 	public void setmToken(String token) {
 		this.mToken = token;
 		System.out.println("Subash Token======"+token +"  Email===="+mEmail);
+		if (token!= null) {
+			final TextView likeButton = (TextView) findViewById(R.id.likedVideo);
+			final TextView subButton = (TextView) findViewById(R.id.subscribedChannel);
+			Button searchButton = (Button) findViewById(R.id.button);
+		
+			likeButton.setEnabled(true);
+			subButton.setEnabled(true);
+			searchButton.setEnabled(true);
+		}
 	}
 
 	public void tokenCheckResult(boolean result) {
@@ -92,20 +137,86 @@ public class MainActivity extends Activity {
 		}
 		else {
 			Toast.makeText(this, "Token Present", Toast.LENGTH_SHORT).show();
+			final TextView likeButton = (TextView) findViewById(R.id.likedVideo);
+			final TextView subButton = (TextView) findViewById(R.id.subscribedChannel);
+			Button searchButton = (Button) findViewById(R.id.button);
+			
+			likeButton.setEnabled(true);
+			subButton.setEnabled(true);
+			searchButton.setEnabled(true);
 		}
 	}
 
 	public void searchResult(List<SearchResult> result) {
 		
-		SearchListAdapter adapter = new SearchListAdapter(this,result);
-		ListView list=(ListView)findViewById(R.id.list);
-		//ListView list = new ListView(this);
+		if (result != null) { 
+			SearchListAdapter adapter = new SearchListAdapter(this,result);
+			ListView list=(ListView)findViewById(R.id.list);
+			//ListView list = new ListView(this);
 
-		list.setAdapter(adapter);
-		//new AlertDialog.Builder(MainActivity.this).setView(list).setTitle("Search Result").show();
-		list.setVisibility(View.VISIBLE);
+			list.setAdapter(adapter);
+			//new AlertDialog.Builder(MainActivity.this).setView(list).setTitle("Search Result").show();
+			list.setVisibility(View.VISIBLE);
+			
+			list.setOnItemClickListener(new OnItemClickListener(){
+			    @Override 
+			    public void onItemClick(AdapterView<?> parent, View view,int position, long arg3)
+			    { 
+			     TextView txt = (TextView) parent.getChildAt(position).findViewById(R.id.txt);
+			            String keyword = txt.getText().toString();
+			            String videoId = (String)txt.getTag();
+			            String videoUrl = "https://www.youtube.com/watch?v="+videoId;
+			            Intent intent = new Intent(getApplicationContext(), YoutubeActivityPlayer.class);
+			            intent.putExtra(YOUTUBE, videoId);
+			            startActivity(intent);
+			    }
+			});
+		}
+		
+		else {
+			Toast.makeText(this, "Cant get result", Toast.LENGTH_SHORT).show();
+		}
 	}
 
+	public void likeVideoResult(List<SearchResult> result) {
+		if ( result != null ) {
+			SearchListAdapter adapter = new SearchListAdapter(this,result);
+			ListView list=(ListView)findViewById(R.id.list);
+		
+
+			list.setAdapter(adapter);
+		
+			list.setVisibility(View.VISIBLE);
+			list.setOnItemClickListener(new OnItemClickListener(){
+			    @Override 
+			    public void onItemClick(AdapterView<?> parent, View view,int position, long arg3)
+			    { 
+			     TextView txt = (TextView) parent.getChildAt(position).findViewById(R.id.txt);
+			            String keyword = txt.getText().toString();
+			            String videoId = (String)txt.getTag();
+			            String videoUrl = "https://www.youtube.com/watch?v="+videoId;
+			            Intent intent = new Intent(getApplicationContext(), YoutubeActivityPlayer.class);
+			            intent.putExtra(YOUTUBE, videoId);
+			            startActivity(intent);
+			    }
+			});
+		}
+		else {
+				Toast.makeText(this, "Cant get result", Toast.LENGTH_SHORT).show();
+			}
+	}
+
+	public void subscribedChannelResult(List<SearchResult> result) {
+		if (result != null) {
+			SearchListAdapter adapter = new SearchListAdapter(this,result);
+			ListView list=(ListView)findViewById(R.id.list);
+			list.setAdapter(adapter);
+			list.setVisibility(View.VISIBLE);
+		}
+		else {
+			Toast.makeText(this, "Cant get result", Toast.LENGTH_SHORT).show();
+		}
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
@@ -186,7 +297,5 @@ public class MainActivity extends Activity {
 	        }
 	    });
 	}
-	
-	
 }
 
